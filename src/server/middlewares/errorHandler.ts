@@ -2,6 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import { HttpStatusCode, sendResponse } from '../utils/responseHelper';
 import logger from '../../main/logger';
 
+/**
+ * Error handler middleware
+ * @param err error object
+ * @param req request object
+ * @param res response object
+ * @param next next function
+ * @returns void
+ * @author 996Worker
+ */
 function errorHandler(
   err: Error,
   req: Request,

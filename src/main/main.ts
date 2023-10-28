@@ -13,7 +13,9 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import { loadConfig, resolveHtmlPath } from './util';
+import { AppConfig } from './types';
+import logger from './logger';
 
 // should start the server or not
 const shouldStartServer = true;
@@ -74,6 +76,9 @@ const createWindow = async () => {
   const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
   };
+
+  const config: AppConfig = loadConfig();
+  logger.info(`loaded config: ${JSON.stringify(config)}`);
 
   mainWindow = new BrowserWindow({
     show: false,

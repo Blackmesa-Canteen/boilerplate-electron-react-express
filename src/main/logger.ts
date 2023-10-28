@@ -1,12 +1,18 @@
 import { createLogger, format, transports, Logger } from 'winston';
 import { app } from 'electron';
 
-// Define the log format
+/**
+ * Log format
+ * @author 996Worker
+ */
 const logFormat = format.printf(({ timestamp, level, message }) => {
   return `${timestamp} ${level}: ${message}`;
 });
 
-// Create logger instance
+/**
+ * Logger instance
+ * @author 996Worker
+ */
 const logger: Logger = createLogger({
   format: format.combine(
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
