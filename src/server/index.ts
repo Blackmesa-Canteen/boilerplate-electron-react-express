@@ -2,7 +2,7 @@ import express from 'express';
 import userRoutes from './routes/userRoutes';
 import setupBodyParser from './middlewares/bodyParser';
 import logger from '../main/logger';
-import errorHandler from "./middlewares/errorHandler";
+import errorHandler from './middlewares/errorHandler';
 
 const app = express();
 const PORT = 4000;
