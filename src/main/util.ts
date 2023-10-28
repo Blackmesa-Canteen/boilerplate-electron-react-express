@@ -57,7 +57,6 @@ export function loadConfig(): AppConfig {
 /**
  * function to get a specific configuration key's value
  * @param key configuration key to get
- * @param value new value for the configuration key
  * @returns the value of the configuration key
  * @throws if the configuration key does not exist
  * @author 996worker
