@@ -98,7 +98,7 @@ const createWindow = async () => {
 
   const downloadedImagePath = await downloadAsset(mainWindow,"https://github.com/Blackmesa-Canteen/static-res/blob/main/demo.jpg?raw=true", 'demo.jpg');
 
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  await mainWindow.loadURL(resolveHtmlPath('index.html'));
 
   console.log('Sending image-downloaded event');
   // // Send the path to the renderer process
