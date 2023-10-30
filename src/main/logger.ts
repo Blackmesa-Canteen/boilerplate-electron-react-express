@@ -3,7 +3,7 @@ import { app } from 'electron';
 
 /**
  * Log format
- * @author 996Worker
+ * @author Shawn
  */
 const logFormat = format.printf(({ timestamp, level, message }) => {
   return `${timestamp} ${level}: ${message}`;
@@ -11,7 +11,7 @@ const logFormat = format.printf(({ timestamp, level, message }) => {
 
 /**
  * Logger instance
- * @author 996Worker
+ * @author Shawn
  */
 const logger: Logger = createLogger({
   format: format.combine(

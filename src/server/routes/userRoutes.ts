@@ -7,7 +7,7 @@ const router = express.Router();
 /**
  * get all users
  * @route GET /api/users
- * @author 996Worker
+ * @author Shawn
  */
 router.get('/', async (req, res) => {
   try {
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
  * @param {string} name.body.required - user name
  * @param {string} email.body.required - user email
  * @param {string} password.body.required - user password
- * @author 996Worker
+ * @author Shawn
  */
 router.post('/', async (req, res) => {
   try {

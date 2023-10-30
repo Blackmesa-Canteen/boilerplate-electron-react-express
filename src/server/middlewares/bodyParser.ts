@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
  * Request body parser middleware
  * @param app
  * @returns void
- * @author 996Worker
+ * @author Shawn
  */
 const setupBodyParser = (app: Express) => {
   app.use(bodyParser.json());

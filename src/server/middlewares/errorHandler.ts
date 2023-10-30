@@ -9,7 +9,7 @@ import logger from '../../main/logger';
  * @param res response object
  * @param next next function
  * @returns void
- * @author 996Worker
+ * @author Shawn
  */
 function errorHandler(
   err: Error,

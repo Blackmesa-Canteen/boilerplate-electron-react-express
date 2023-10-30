@@ -9,13 +9,14 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, protocol, net } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { loadConfig, resolveHtmlPath } from './util';
-import { AppConfig } from './types';
+import { resolveHtmlPath } from './util';
 import logger from './logger';
+import { AppConfig, Configstore } from './utils/configHelper';
+import { downloadAsset } from './utils/assetDownloader';
 
 // should start the server or not
 const shouldStartServer = true;
@@ -73,12 +74,15 @@ const createWindow = async () => {
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
 
+  // init with config and assets
   const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  const config: AppConfig = loadConfig();
-  logger.info(`loaded config: ${JSON.stringify(config)}`);
+  const apiEndpoint : string = Configstore.store.apiEndpoint;
+  logger.info(`loaded config: ${apiEndpoint}`);
+
+
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -92,7 +96,13 @@ const createWindow = async () => {
     },
   });
 
+  const downloadedImagePath = await downloadAsset(mainWindow,"https://github.com/Blackmesa-Canteen/static-res/blob/main/demo.jpg?raw=true", 'demo.jpg');
+
   mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+  console.log('Sending image-downloaded event');
+  // // Send the path to the renderer process
+  // mainWindow.webContents.send('image-downloaded', downloadedImagePath);
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -103,6 +113,9 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
+
+    // Send the path to the renderer process
+    mainWindow.webContents.send('image-downloaded', downloadedImagePath);
   });
 
   mainWindow.on('closed', () => {
@@ -138,6 +151,11 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    // Register the 'app' protocol to bypass security restrictions for assets
+    protocol.handle('app', (request) => {
+      const urlPath = request.url.substring(6); // Remove 'app://'
+      return net.fetch(`file://${decodeURIComponent(urlPath)}`);
+    });
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

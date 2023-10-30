@@ -6,7 +6,7 @@ const { usersDb } = database;
  * @description Get all users from the database
  * @returns {Promise<any[]>} Promise that resolves to an array of users
  * @throws {Error} Error message string
- * @author 996Worker
+ * @author Shawn
  */
 const getAllUsers = async (): Promise<any[]> => {
   return new Promise((resolve, reject) => {
