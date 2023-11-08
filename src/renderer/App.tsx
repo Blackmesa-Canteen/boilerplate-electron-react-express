@@ -5,20 +5,6 @@ import { useEffect, useState } from 'react';
 
 function Hello() {
 
-  const [downloadedImagePath, setDownloadedImagePath] = useState<string>('');
-
-  useEffect(() => {
-    console.log('Setting up event listener for image-downloaded');
-    // Use the extended electronHandler to listen for the image-downloaded event
-    (window as any).electron.ipcRenderer.onAssetDownloaded((path: string) => {
-      setDownloadedImagePath(path);
-      console.log('Downloaded image path: ', path)
-    });
-
-    // Trigger the asset download (if needed)
-    // (window as any).electron.ipcRenderer.downloadAsset("YOUR_URL_HERE");
-  }, []);
-
   return (
     <div>
       <div className="Hello">
@@ -50,9 +36,6 @@ function Hello() {
             Donate
           </button>
         </a>
-      </div>
-      <div>
-        {downloadedImagePath && <img width="200" alt="icon" src={`app://${downloadedImagePath}`} />}
       </div>
     </div>
   );

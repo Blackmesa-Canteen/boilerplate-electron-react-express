@@ -16,7 +16,6 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import logger from './logger';
 import { AppConfig, Configstore } from './utils/configHelper';
-import { downloadAsset } from './utils/assetDownloader';
 
 // should start the server or not
 const shouldStartServer = true;
@@ -96,8 +95,6 @@ const createWindow = async () => {
     },
   });
 
-  const downloadedImagePath = await downloadAsset(mainWindow,"https://github.com/Blackmesa-Canteen/static-res/blob/main/demo.jpg?raw=true", 'demo.jpg');
-
   await mainWindow.loadURL(resolveHtmlPath('index.html'));
 
   console.log('Sending image-downloaded event');
@@ -113,9 +110,6 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
-
-    // Send the path to the renderer process
-    mainWindow.webContents.send('image-downloaded', downloadedImagePath);
   });
 
   mainWindow.on('closed', () => {

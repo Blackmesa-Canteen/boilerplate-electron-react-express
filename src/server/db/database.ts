@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import Datastore from 'nedb';
+import Datastore from '@seald-io/nedb';
 
 /**
  * Database instance
