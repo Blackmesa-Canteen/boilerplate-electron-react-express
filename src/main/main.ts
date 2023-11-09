@@ -19,8 +19,9 @@ import { AppConfig, Configstore } from './utils/configHelper';
 
 // should start the server or not
 const shouldStartServer = true;
+let serverInstance = null;
 if (shouldStartServer) {
-  require('../server/index.ts');
+  serverInstance = require('../server/index.ts');
 }
 
 class AppUpdater {
@@ -82,7 +83,7 @@ const createWindow = async () => {
   logger.info(`loaded config: ${apiEndpoint}`);
 
 
-
+  console.log('create a Browser Window!!')
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
@@ -95,25 +96,35 @@ const createWindow = async () => {
     },
   });
 
-  await mainWindow.loadURL(resolveHtmlPath('index.html'));
-
-  console.log('Sending image-downloaded event');
-  // // Send the path to the renderer process
-  // mainWindow.webContents.send('image-downloaded', downloadedImagePath);
-
   mainWindow.on('ready-to-show', () => {
+    console.log('ready-to-show!!')
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
     if (process.env.START_MINIMIZED) {
+      console.log('minimize!!')
       mainWindow.minimize();
     } else {
+      console.log('show!!')
       mainWindow.show();
     }
   });
 
+  mainWindow.webContents.on('did-finish-load', () => {
+    console.log('did-finish-load!!')
+    mainWindow?.show();
+  });
+
+  console.log('loadURL!!')
+  await mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+
   mainWindow.on('closed', () => {
     mainWindow = null;
+    // close the server
+    if (serverInstance) {
+      serverInstance = null;
+    }
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -128,6 +139,8 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  console.log('end of createWindow function!!')
 };
 
 /**
@@ -137,6 +150,10 @@ const createWindow = async () => {
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
+  // close the server
+  if (serverInstance) {
+    serverInstance = null;
+  }
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -150,6 +167,7 @@ app
       const urlPath = request.url.substring(6); // Remove 'app://'
       return net.fetch(`file://${decodeURIComponent(urlPath)}`);
     });
+    console.log('createWindow!!')
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
